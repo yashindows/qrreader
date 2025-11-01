@@ -2,19 +2,18 @@
 <html>
 <head>
     <title>QR-сканер</title>
-    <script src="https://unpkg.com/@zxing/library/umd/zxing.min.js"></script>
 </head>
 <body>
     <video id="video" width="640" height="480" autoplay></video>
     <p id="result"></p>
-
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@latest/umd/index.min.js"></script>
     <script>
         const video = document.getElementById('video');
         const resultElement = document.getElementById('result');
         let reader;
 
         async function startScanner() {
-            reader = new ZXing.BrowserVideoReader();
+            reader = new ZXing.BrowserQRCodeReader();
             const formats = [
                 ZXing.BarcodeFormat.QR_CODE
             ];
@@ -39,7 +38,7 @@
 
         // Запуск сканера при загрузке страницы
         window.addEventListener('load', startScanner);
-
+        
     </script>
 </body>
 </html>
