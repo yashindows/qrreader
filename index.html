@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR-сканер</title>
+    <script src="https://unpkg.com/@zxing/library/umd/zxing.min.js"></script>
+</head>
+<body>
+    <video id="video" width="640" height="480" autoplay></video>
+    <p id="result"></p>
+
+    <script>
+        const video = document.getElementById('video');
+        const resultElement = document.getElementById('result');
+        let reader;
+
+        async function startScanner() {
+            reader = new ZXing.BrowserVideoReader();
+            const formats = [
+                ZXing.BarcodeFormat.QR_CODE
+            ];
+            const hints = new Map();
+            hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, formats);
+
+            try {
+                await reader.decodeFromVideoDevice(undefined, 'video', (result, err) => {
+                    if (result) {
+                        resultElement.textContent = result.text;
+                        console.log('Данные из QR-кода:', result.text);
+                        reader.stop(); // Остановить после первого считывания
+                    } else if (err && !(err instanceof ZXing.NotFoundException)) {
+                        console.error('Ошибка сканирования:', err);
+                    }
+                });
+            } catch (error) {
+                console.error('Не удалось получить доступ к камере:', error);
+                resultElement.textContent = 'Не удалось получить доступ к камере. Пожалуйста, дайте разрешение.';
+            }
+        }
+
+        // Запуск сканера при загрузке страницы
+        window.addEventListener('load', startScanner);
+
+    </script>
+</body>
+</html>
