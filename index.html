@@ -5,13 +5,11 @@
 </head>
 <body>
     <div class="wrapper" style="height: 100dvh; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-        <video  id="video" width="50%" height="70%" autoplay></video>
-        <p id="result"></p>
+        <video  id="video" width="70%" height="70%" autoplay></video>
+        <pre id="result"></pre>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@latest/umd/index.min.js"></script>
     <script>
-        const data = []
-
         const video = document.getElementById('video');
         const resultElement = document.getElementById('result');
         let reader;
@@ -27,10 +25,9 @@
             try {
                 await reader.decodeFromVideoDevice(undefined, 'video', (result, err) => {
                     if (result) {
-                        data.push(result.text)
-                        resultElement.textContent = data[0];
-                        console.log('Данные из QR-кода:', typeof result.text);
-                        // reader.stop(); // Остановить после первого считывания
+                        resultElement.textContent = result.text;
+                        console.log('Данные из QR-кода:', result.text);
+                        reader.reset()
                     } else if (err && !(err instanceof ZXing.NotFoundException)) {
                         console.error('Ошибка сканирования:', err);
                     }
